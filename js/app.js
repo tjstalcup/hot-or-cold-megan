@@ -13,18 +13,19 @@ $(document).ready(function(){
   	});
 
 	/*--- Variables ---*/
-	var count;
+	var count = 0;
 	var userGuess; 
 	var randomNumber;
 	var distanceFromNumber;
-	var pastGuesses;
-	var guessHtml;
-	var wonGame = false;  	
+	var pastGuesses = [];
+	var wonGame = false; 
+  newNumber(); 	
 
 	$('form').submit(function(event) {
 		event.preventDefault();
-		getUserGuess();
-
+    if(!wonGame){
+      getUserGuess();  
+    }
 	});
 	$('a.new').click(newGame);
 
@@ -43,8 +44,8 @@ $(document).ready(function(){
 
   	/*--- Get user guess ---*/
   	function getUserGuess() {
-  		userGuess = $form.find('#userGuess').val();
-  		$form.find('#userGuess').val('');
+  		userGuess = $('form').find('#userGuess').val();
+  		$('form').find('#userGuess').val('');
   		if(validGuess()){return};
   		hotOrCold();
   		trackGuesses();
@@ -90,14 +91,14 @@ $(document).ready(function(){
   	/*--- Track number of guesses ---*/
   	function guessCount() {
   		count++;
+      $('#count').text(count);
   	}
 
   	/*--- List numbers guessed ---*/
   	function trackGuesses() {
   		pastGuesses.push(userGuess);
-  		guessHtml = ""
-  		if (pastGuesses[0].length) {
-  			$('#guessList').append('<li>' + value + '</li>')
+  		if (pastGuesses.length) {
+  			$('#guessList').append('<li>' + userGuess + '</li>')
   		}
   	}
  
@@ -105,9 +106,12 @@ $(document).ready(function(){
  	function resetVar() {
  		count = 0;
  		pastGuesses = [];
- 		guessHtml = '';
  		userGuess = '';
  		userFeedback = "Make your Guess!"
+    wonGame = false;
+    $('#feedback').text(userFeedback);
+    $('#count').text(count);
+    $('#guessList').html('');
  	}
 
 });
